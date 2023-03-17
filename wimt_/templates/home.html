@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>Where is my Train</title>
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <br>
+    </br>
+    <form method="POST">
+        {% csrf_token %}
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating ">
+                <input type="number" class="form-control " id="trainnumber" name="floatingInputGrid" placeholder="Enter Train No" value={{ train_no | default_if_none:''}}>
+                <label for="floatingInputGrid">Train No</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating">
+                <select class="form-select" name="floatingSelectGrid">
+                    {% if date_no %}
+                    {% if date_no == "1"  %}
+                    <option value="1" selected>Yesterday</option>
+                    {% elif date_no == "2" %}
+                    <option value="2" selected>Today</option>
+                    {% else %}  
+                    <option value="3" selected>Tomorrow</option>
+                    {% endif %}
+                    {% endif %} 
+                    <option value="1">Yesterday</option>
+                    <option value="2">Today</option>
+                    <option value="3">Tomorrow</option>
+                </select>
+                <label for="floatingSelectGrid">Works with selects</label>
+            </div>
+        </div>
+    </div>
+    {% comment %} <button type="button" class="btn btn-success d-flex justify-content-center">Success</button> {% endcomment %}
+    <br>
+    </br>
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <button class="btn btn-success" type="submit" value="submit"  id="btn">Show Train Status</button>
+        </a>
+    </div>
+    </form>
+    {% if messages %}
+   {% for message in messages %}
+   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong>opos!</strong>{{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+      </button>
+   </div>
+   {% endfor %}
+   {% endif %}
+    {% if ans %}
+    <p class="fs-6">Current Status:</p>
+    <p class="fw-bold fs-2">{{ split_list.0 }}</p>
+    <p class="fw-bold fs-2">{{ split_list.1 }}</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Station Name Speed</th>
+                <th scope="col">Sch/Act Arrival      Train Arrival Status</th>
+                <th scope="col">Sch/Act Departure Train Departure Status</th>
+                <th scope="col">PF</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for list in ans %}
+            <tr class="table-light">
+                <td>{{list.0}}</td>
+                <td>{{list.1}}</td>
+                <td>{{list.2}}</td>
+                <td>{{list.3}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock content %}
